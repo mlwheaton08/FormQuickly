@@ -21,45 +21,45 @@ DROP TABLE IF EXISTS [Form];
 DROP TABLE IF EXISTS [User];
 
 CREATE TABLE [User] (
-  [Id] int PRIMARY KEY,
-  [FirebaseId] nvarchar(255),
-  [Email] nvarchar(255),
-  [Username] nvarchar(255),
-  [RegisterDate] datetime
+  [Id] int PRIMARY KEY identity,
+  [FirebaseId] nvarchar(255) unique not null,
+  [Email] nvarchar(255) not null,
+  [Username] nvarchar(255) not null,
+  [RegisterDate] datetime not null
 )
 GO
 
 CREATE TABLE [UserNotification] (
-  [Id] int PRIMARY KEY,
-  [UserId] int,
-  [NotificationTypeId] int,
-  [Text] nvarchar(255),
-  [Route] nvarchar(255),
-  [DateCreated] datetime,
-  [Visited] bit
+  [Id] int PRIMARY KEY identity,
+  [UserId] int not null,
+  [NotificationTypeId] int not null,
+  [Text] nvarchar(255) not null,
+  [Route] nvarchar(255) not null,
+  [DateCreated] datetime not null,
+  [Visited] bit not null
 )
 GO
 
 CREATE TABLE [NotificationType] (
-  [Id] int PRIMARY KEY,
-  [Type] nvarchar(255),
-  [Image] nvarchar(255)
+  [Id] int PRIMARY KEY identity,
+  [Type] nvarchar(255) not null,
+  [Image] nvarchar(255) not null
 )
 GO
 
 CREATE TABLE [Form] (
-  [Id] int PRIMARY KEY,
-  [CreatorUserId] int,
-  [Name] nvarchar(255),
-  [Description] nvarchar(255),
+  [Id] int PRIMARY KEY identity,
+  [CreatorUserId] int not null,
+  [Name] nvarchar(255) not null,
+  [Description] nvarchar(2000),
   [ListStyle] nvarchar(255),
-  [PromptsHaveCorrectAnswers] bit,
-  [FormVisibility] nvarchar(255),
-  [UserAnswerVisibility] nvarchar(255),
+  [PromptsHaveCorrectAnswers] bit not null,
+  [FormVisibility] nvarchar(255) not null,
+  [UserAnswerVisibility] nvarchar(255) not null,
   [MaxUserAttempts] int,
   [MaxSelectedSamePromptOption] int,
   [MaxOptionsEachUserCanSelect] int,
-  [DateCreated] datetime,
+  [DateCreated] datetime not null,
   [DateEdited] datetime,
   [DateUpdated] datetime,
   [DateCompleted] datetime
@@ -67,18 +67,18 @@ CREATE TABLE [Form] (
 GO
 
 CREATE TABLE [FormPrompt] (
-  [Id] int PRIMARY KEY,
-  [FormId] int,
-  [OrderPosition] int,
-  [Type] nvarchar(255),
+  [Id] int PRIMARY KEY identity,
+  [FormId] int not null,
+  [OrderPosition] int not null,
+  [Type] nvarchar(255) not null,
   [Prompt] nvarchar(255),
-  [InputDataType] nvarchar(255),
+  [InputDataType] nvarchar(255) not null,
   [ListStyle] nvarchar(255),
-  [HasCorrectAnswer] bit,
+  [HasCorrectAnswer] bit not null,
   [CorrectAnswer] nvarchar(255),
-  [UserAnswerVisibility] nvarchar(255),
-  [AcceptSameUserAnswers] bit,
-  [AllowUserAnswerEdit] bit,
+  [UserAnswerVisibility] nvarchar(255) not null,
+  [AcceptSameUserAnswers] bit not null,
+  [AllowUserAnswerEdit] bit not null,
   [MaxUserAttempts] int,
   [MaxSelectedSameOption] int,
   [MaxOptionsEachUserCanSelect] int
@@ -86,28 +86,28 @@ CREATE TABLE [FormPrompt] (
 GO
 
 CREATE TABLE [PromptOption] (
-  [Id] int PRIMARY KEY,
-  [PromptId] int,
-  [OrderPosition] int,
-  [Option] nvarchar(255),
+  [Id] int PRIMARY KEY identity,
+  [PromptId] int not null,
+  [OrderPosition] int not null,
+  [Option] nvarchar(255) not null,
   [MaxTimesSelected] int
 )
 GO
 
 CREATE TABLE [UserPromptAnswer] (
-  [Id] int PRIMARY KEY,
-  [UserId] int,
-  [PromptId] int,
-  [Answer] nvarchar(255),
-  [DateAnswered] datetime,
+  [Id] int PRIMARY KEY identity,
+  [UserId] int not null,
+  [PromptId] int not null,
+  [Answer] nvarchar(255) not null,
+  [DateAnswered] datetime not null,
   [DateEdited] datetime
 )
 GO
 
 CREATE TABLE [UserClientForm] (
-  [Id] int PRIMARY KEY,
-  [UserId] int,
-  [FormId] int,
+  [Id] int PRIMARY KEY identity,
+  [UserId] int not null,
+  [FormId] int not null,
   [DateStarted] datetime,
   [DateUpdated] datetime,
   [DateCompleted] datetime
@@ -115,13 +115,13 @@ CREATE TABLE [UserClientForm] (
 GO
 
 CREATE TABLE [FormPreset] (
-  [Id] int PRIMARY KEY,
-  [Name] nvarchar(255),
+  [Id] int PRIMARY KEY identity,
+  [Name] nvarchar(255) not null,
   [Description] nvarchar(255),
   [ListStyle] nvarchar(255),
-  [PromptsHaveCorrectAnswers] bit,
-  [FormVisibility] nvarchar(255),
-  [UserAnswerVisibility] nvarchar(255),
+  [PromptsHaveCorrectAnswers] bit not null,
+  [FormVisibility] nvarchar(255) not null,
+  [UserAnswerVisibility] nvarchar(255) not null,
   [MaxUserAttempts] int,
   [MaxSelectedSamePromptOption] int,
   [MaxOptionsEachUserCanSelect] int
@@ -129,18 +129,18 @@ CREATE TABLE [FormPreset] (
 GO
 
 CREATE TABLE [FormPromptPreset] (
-  [Id] int PRIMARY KEY,
-  [FormPresetId] int,
-  [OrderPosition] int,
-  [Type] nvarchar(255),
+  [Id] int PRIMARY KEY identity,
+  [FormPresetId] int not null,
+  [OrderPosition] int not null,
+  [Type] nvarchar(255) not null,
   [Prompt] nvarchar(255),
-  [InputDataType] nvarchar(255),
+  [InputDataType] nvarchar(255) not null,
   [ListStyle] nvarchar(255),
-  [HasCorrectAnswer] bit,
+  [HasCorrectAnswer] bit not null,
   [CorrectAnswer] nvarchar(255),
-  [UserAnswerVisibility] nvarchar(255),
-  [AcceptSameUserAnswers] bit,
-  [AllowUserAnswerEdit] bit,
+  [UserAnswerVisibility] nvarchar(255) not null,
+  [AcceptSameUserAnswers] bit not null,
+  [AllowUserAnswerEdit] bit not null,
   [MaxUserAttempts] int,
   [MaxSelectedSameOption] int,
   [MaxOptionsEachUserCanSelect] int
@@ -148,10 +148,10 @@ CREATE TABLE [FormPromptPreset] (
 GO
 
 CREATE TABLE [PromptOptionPreset] (
-  [Id] int PRIMARY KEY,
-  [PresetPromptId] int,
-  [OrderPosition] int,
-  [Option] nvarchar(255),
+  [Id] int PRIMARY KEY identity,
+  [PresetPromptId] int not null,
+  [OrderPosition] int not null,
+  [Option] nvarchar(255) not null,
   [MaxTimesSelected] int
 )
 GO
