@@ -25,7 +25,7 @@ CREATE TABLE [User] (
   [FirebaseId] nvarchar(255) unique not null,
   [Email] nvarchar(255) not null,
   [Username] nvarchar(255) not null,
-  [RegisterDate] datetime not null
+  [DateRegistered] datetime not null
 )
 GO
 
@@ -52,13 +52,9 @@ CREATE TABLE [Form] (
   [CreatorUserId] int not null,
   [Name] nvarchar(255) not null,
   [Description] nvarchar(2000),
-  [ListStyle] nvarchar(255),
-  [PromptsHaveCorrectAnswers] bit not null,
-  [FormVisibility] nvarchar(255) not null,
-  [UserAnswerVisibility] nvarchar(255) not null,
+  [UserResultsVisibility] nvarchar(255) not null,
+  [AllResultsVisibility] nvarchar(255) not null,
   [MaxUserAttempts] int,
-  [MaxSelectedSamePromptOption] int,
-  [MaxOptionsEachUserCanSelect] int,
   [DateCreated] datetime not null,
   [DateEdited] datetime,
   [DateUpdated] datetime,
@@ -76,7 +72,8 @@ CREATE TABLE [FormPrompt] (
   [ListStyle] nvarchar(255),
   [HasCorrectAnswer] bit not null,
   [CorrectAnswer] nvarchar(255),
-  [UserAnswerVisibility] nvarchar(255) not null,
+  [UserResultsVisibility] nvarchar(255) not null,
+  [AllResultsVisibility] nvarchar(255) not null,
   [AcceptSameUserAnswers] bit not null,
   [AllowUserAnswerEdit] bit not null,
   [MaxUserAttempts] int,
@@ -118,13 +115,9 @@ CREATE TABLE [FormPreset] (
   [Id] int PRIMARY KEY identity,
   [Name] nvarchar(255) not null,
   [Description] nvarchar(255),
-  [ListStyle] nvarchar(255),
-  [PromptsHaveCorrectAnswers] bit not null,
-  [FormVisibility] nvarchar(255) not null,
-  [UserAnswerVisibility] nvarchar(255) not null,
-  [MaxUserAttempts] int,
-  [MaxSelectedSamePromptOption] int,
-  [MaxOptionsEachUserCanSelect] int
+  [UserResultsVisibility] nvarchar(255) not null,
+  [AllResultsVisibility] nvarchar(255) not null,
+  [MaxUserAttempts] int
 )
 GO
 
@@ -138,7 +131,8 @@ CREATE TABLE [FormPromptPreset] (
   [ListStyle] nvarchar(255),
   [HasCorrectAnswer] bit not null,
   [CorrectAnswer] nvarchar(255),
-  [UserAnswerVisibility] nvarchar(255) not null,
+  [UserResultsVisibility] nvarchar(255) not null,
+  [AllResultsVisibility] nvarchar(255) not null,
   [AcceptSameUserAnswers] bit not null,
   [AllowUserAnswerEdit] bit not null,
   [MaxUserAttempts] int,
@@ -187,4 +181,94 @@ ALTER TABLE [FormPromptPreset] ADD FOREIGN KEY ([FormPresetId]) REFERENCES [Form
 GO
 
 ALTER TABLE [PromptOptionPreset] ADD FOREIGN KEY ([PresetPromptId]) REFERENCES [FormPromptPreset] ([Id])
+GO
+
+
+-- STARTING DATA
+
+INSERT INTO [User] (FirebaseId,Email,Username,DateRegistered)
+VALUES
+  ('aaaaa','serenaburton@icloud.org','sBurton','2024-06-18T10:47:20.000Z'),
+  ('bbbbb','hasadwelch@outlook.ca','hWelch','2024-02-21T06:55:46.000Z'),
+  ('ccccc','iladawson5963@aol.org','iDawson','2024-04-14T10:30:20.000Z'),
+  ('ddddd','quinncole5977@aol.couk','qCole','2023-10-10T04:01:55.000Z'),
+  ('eeeee','anjoliehart@protonmail.net','aHart','2024-03-06T05:16:27.000Z');
+GO
+
+INSERT INTO Form (CreatorUserId,
+					[Name],
+					[Description],
+					UserResultsVisibility,
+					AllResultsVisibility,
+					MaxUserAttempts,
+					DateCreated,
+					DateEdited,
+					DateUpdated,
+					DateCompleted)
+VALUES
+	(1,
+	'History Pop Quiz',
+	'Take your time answering these questions. You may have 2 attempts',
+	'visible',
+	'hidden',
+	2,
+	'2023-07-06T05:44:32.000Z',
+	'2023-07-07T09:22:14.000Z',
+	'2023-07-08T01:23:32.000Z',
+	'2023-07-08T01:23:32.000Z'),
+
+	(1,
+	'Quiz: Get to know Mrs. Burton',
+	null,
+	'visible',
+	'visible',
+	1,
+	'2023-02-04T05:44:32.000Z',
+	'2023-02-05T09:22:14.000Z',
+	'2023-02-06T01:23:32.000Z',
+	'2023-02-06T01:23:32.000Z'),
+
+	(1,
+	'What type of learner are you?',
+	'Answer quickly without putting too much thought into it. Options range from "Strongly agree" to "Strongly disagree".',
+	'hidden',
+	'hidden',
+	1,
+	'2023-03-01T05:44:32.000Z',
+	'2023-03-02T09:22:14.000Z',
+	'2023-03-03T01:23:32.000Z',
+	'2023-03-03T01:23:32.000Z'),
+
+	(3,
+	'Tell me what you''re bringing to my party this Saturday',
+	null,
+	'visible',
+	'visible',
+	null,
+	'2022-08-11T05:44:32.000Z',
+	'2022-08-12T09:22:14.000Z',
+	'2022-08-14T01:23:32.000Z',
+	'2022-08-14T01:23:32.000Z'),
+
+	(3,
+	'D&D character backstory',
+	'Please complete this by Wednesday so I can write your character into the campaign and prepare an intro for them. Thanks!',
+	'visible',
+	'hidden',
+	null,
+	'2022-03-18T05:44:32.000Z',
+	'2022-03-19T09:22:14.000Z',
+	'2022-03-21T01:23:32.000Z',
+	'2022-03-21T01:23:32.000Z'),
+
+	(5,
+	'About Me Questionnaire',
+	'Let us get to know you! Please complete this form before our first meetup next month. Thanks!',
+	'visible',
+	'hidden',
+	null,
+	'2021-05-13T05:44:32.000Z',
+	'2021-05-14T09:22:14.000Z',
+	'2021-05-15T01:23:32.000Z',
+	'2021-05-15T01:23:32.000Z')
 GO
